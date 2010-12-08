@@ -1,0 +1,36 @@
+diff --git a/src/GeoNodePy/geonode/core/management/__init__.py b/src/GeoNodePy/geonode/core/management/__init__.py
+new file mode 100644
+index 0000000..fd6ce56
+--- /dev/null
++++ b/src/GeoNodePy/geonode/core/management/__init__.py
+@@ -0,0 +1 @@
++# geonode.core.management module
+diff --git a/src/GeoNodePy/geonode/core/management/commands/__init__.py b/src/GeoNodePy/geonode/core/management/commands/__init__.py
+new file mode 100644
+index 0000000..388e466
+--- /dev/null
++++ b/src/GeoNodePy/geonode/core/management/commands/__init__.py
+@@ -0,0 +1 @@
++#geonode.core.management.commands package
+diff --git a/src/GeoNodePy/geonode/core/management/commands/batchcreatesuperuser.py b/src/GeoNodePy/geonode/core/management/commands/batchcreatesuperuser.py
+new file mode 100644
+index 0000000..f74a4db
+--- /dev/null
++++ b/src/GeoNodePy/geonode/core/management/commands/batchcreatesuperuser.py
+@@ -0,0 +1,16 @@
++from django.core.management.base import BaseCommand
++from django.contrib.auth.models import User
++
++class Command(BaseCommand):
++    help = 'Create a user with valid login from command prompt'
++    args = 'username password'
++
++    def handle(self, *args, **keywordargs):
++        try:
++            username, password = args[0:2]
++        except Exception, e:
++            print "Username and password must be provided"
++        user, created = User.objects.get_or_create(username=username)
++        user.is_superuser = True
++        user.set_password(password)
++        user.save()
