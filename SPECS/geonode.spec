@@ -52,10 +52,10 @@ analysis, and reporting tools.
         # turn it back on
 
         if [ -e /var/lib/tomcat5/geonetwork ]; then
-                invoke-rc.d tomcat5 stop
-                rm -rf  /var/lib/tomcat6/webapps/geoserver-geonode-dev /var/lib/tomcat6/geonetwork
-                rm -rf /var/lib/tomcat6/webapps/geoserver-geonode-dev.war /var/lib/tomcat6/webapps/geonetwork.war
-                invoke-rc.d tomcat5 start
+                service tomcat5 stop
+                rm -rf  /var/lib/tomcat5/webapps/geoserver-geonode-dev /var/lib/tomcat5/webapps/geonetwork
+                rm -rf /var/lib/tomcat5/webapps/geoserver-geonode-dev.war /var/lib/tomcat5/webapps/geonetwork.war
+                service tomcat5 start
         fi
 
         rm -rf /usr/share/geonode/role.sql /usr/share/geonode/django.configured /usr/share/geonode/*.gz
