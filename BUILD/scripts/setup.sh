@@ -97,7 +97,6 @@ function configuredjango() {
 # set up django
 #
 mkdir -p /var/www/geonode/{htdocs,htdocs/media,wsgi/geonode/}
-unzip -o /usr/share/geonode/geonode-client.zip -d /var/www/geonode/htdocs/ > /dev/null
 cp /usr/share/geonode/bootstrap.py /var/www/geonode/wsgi/geonode/.
 cp /usr/share/geonode/geonode-webapp.pybundle /var/www/geonode/wsgi/geonode/.
 cp /usr/share/geonode/pavement.py /var/www/geonode/wsgi/geonode/.
@@ -213,8 +212,7 @@ function configureapache() {
 	       Allow from all
 	   </Proxy>
 
-	   Alias /geonode-client/ /var/www/geonode/htdocs/geonode-client/
-	   Alias /media/ /var/www/geonode/htdocs/media/
+	   Alias /media/ /var/www/geonode/wsgi/geonode/src/GeoNodePy/geonode/media/
 	   Alias /admin-media/ /var/www/geonode/wsgi/geonode/lib/python2.6/site-packages/django/contrib/admin/media/
 
 	   WSGIPassAuthorization On

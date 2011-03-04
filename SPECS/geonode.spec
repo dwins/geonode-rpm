@@ -1,5 +1,5 @@
 Name: geonode
-Version: 1.0
+Version: 1.0.1
 Release: final
 Summary: Allows the creation, sharing, and collaborative use of geospatial data.
 License: see /usr/share/doc/geonode/copyright
