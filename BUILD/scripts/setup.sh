@@ -35,19 +35,18 @@ service tomcat5 stop
 #
 chown tomcat. /usr/share/geonode/*.war
 cp /usr/share/geonode/geonetwork.war /var/lib/tomcat5/webapps
-cp /usr/share/geonode/geoserver-geonode-dev.war /var/lib/tomcat5/webapps
+cp /usr/share/geonode/geoserver.war /var/lib/tomcat5/webapps
 
 # perform geonode specific customizations on geoserver
 #
-unzip -o /var/lib/tomcat5/webapps/geoserver-geonode-dev.war -d /var/lib/tomcat5/webapps/geoserver-geonode-dev > /dev/null
-patch -l /var/lib/tomcat5/webapps/geoserver-geonode-dev/WEB-INF/web.xml  < /usr/share/geonode/patch.me
+unzip -qq /var/lib/tomcat5/webapps/geoserver.war -d /var/lib/tomcat5/webapps/geoserver
+patch -l /var/lib/tomcat5/webapps/geoserver/WEB-INF/web.xml < /usr/share/geonode/patch.me
 mkdir -p /opt/geoserver_data
-cp -rp /var/lib/tomcat5/webapps/geoserver-geonode-dev/data/* /opt/geoserver_data/.
+cp -rp /var/lib/tomcat5/webapps/geoserver/data/* /opt/geoserver_data/.
 chown tomcat. /opt/geoserver_data/ -R
 
 chkconfig tomcat5 on
 service tomcat5 start
-
 }
 
 function configurepostgres() {
@@ -145,7 +144,7 @@ source /etc/profile
 	SECRET_KEY = ''
 
 	# The FULLY QUALIFIED url to the GeoServer instance for this GeoNode.
-	GEOSERVER_BASE_URL = SITEURL + "geoserver-geonode-dev/"
+	GEOSERVER_BASE_URL = SITEURL + "geoserver/"
 
 	# The FULLY QUALIFIED url to the GeoNetwork instance for this GeoNode
 	GEONETWORK_BASE_URL = SITEURL + "geonetwork/"
@@ -220,8 +219,8 @@ function configureapache() {
 
 	   ProxyPreserveHost On
 
-	   ProxyPass /geoserver-geonode-dev http://localhost:8080/geoserver-geonode-dev
-	   ProxyPassReverse /geoserver-geonode-dev http://localhost:8080/geoserver-geonode-dev
+	   ProxyPass /geoserver http://localhost:8080/geoserver
+	   ProxyPassReverse /geoserver http://localhost:8080/geoserver
 	   ProxyPass /geonetwork http://localhost:8080/geonetwork
 	   ProxyPassReverse /geonetwork http://localhost:8080/geonetwork
 	</VirtualHost>
