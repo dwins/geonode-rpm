@@ -183,45 +183,8 @@ function configureapache() {
 		setsebool -P httpd_can_network_connect=1
 	fi
 
-	cat <<- EOF > /etc/httpd/conf.d/geonode.conf
-	<VirtualHost *:80>
-	   Servername $myhost
-	   ServerAdmin webmaster@localhost
-	   DocumentRoot /var/www/geonode/htdocs/
-	   <Directory />
-	       Options FollowSymLinks
-	       AllowOverride None
-	   </Directory>
-	   <Directory /var/www/geonode/htdocs>
-	       Options Indexes FollowSymLinks MultiViews
-	       AllowOverride None
-	       Order allow,deny
-	       allow from all
-	   </Directory>
-	   <Proxy *>
-	       Order allow,deny
-	       Allow from all
-	   </Proxy>
-
-	   Alias /media/ /var/www/geonode/wsgi/geonode/src/GeoNodePy/geonode/media/
-	   Alias /admin-media/ /var/www/geonode/wsgi/geonode/lib/python2.6/site-packages/django/contrib/admin/media/
-
-	   WSGIPassAuthorization On
-	   WSGIScriptAlias / /var/www/geonode/wsgi/geonode.wsgi
-
-	   ProxyPreserveHost On
-
-	   ProxyPass /geoserver http://localhost:8080/geoserver
-	   ProxyPassReverse /geoserver http://localhost:8080/geoserver
-	   ProxyPass /geonetwork http://localhost:8080/geonetwork
-	   ProxyPassReverse /geonetwork http://localhost:8080/geonetwork
-	</VirtualHost>
-	EOF
-
 	chkconfig httpd on
 	service httpd start
-
-
 }
 
 respond() {

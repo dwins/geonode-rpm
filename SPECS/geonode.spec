@@ -49,6 +49,13 @@ analysis, and reporting tools.
         cp -R "$TC"/geoserver/data/ "$GS_DATA"
         (cd "$TC"/geoserver/WEB-INF/ && patch -p0) < geoserver.patch
         unzip -qq $RELEASE/geonetwork.war -d $TC/geonetwork/
+
+        #Put Apache config files in place
+        mkdir -p "$RPM_BUILD_ROOT"/etc/httpd/conf.d/ \
+                 "$RPM_BUILD_ROOT"/var/www/geonode/wsgi/
+
+        cp geonode.conf "$RPM_BUILD_ROOT"/etc/httpd/conf.d/
+        cp geonode.wsgi "$RPM_BUILD_ROOT"/var/www/geonode/wsgi/
 %post
 
 cat << EOF >> /etc/sysconfig/tomcat5
@@ -59,43 +66,16 @@ echo "GEONODE: you will need to run /usr/share/geonode/setup.sh to complete this
 
 
 %preun
-# stop services
-        if [ -e /etc/httpd/conf/geonode.conf ]; then
-                service httpd stop
-                rm -rf /etc/httpd/conf/geonode.conf
-                service httpd start
-        fi
-
-        rm -rf /var/www/geonode
-
-        # turn off error trapping, one of these may fail
-        set +e
-        su - postgres -c "dropdb geonode"
-        su - postgres -c "dropuser geonode"
-        set -e
-        # turn it back on
-
-        if [ -e /var/lib/tomcat5/geonetwork ]; then
-                service tomcat5 stop
-                rm -rf  /var/lib/tomcat5/webapps/geoserver-geonode-dev /var/lib/tomcat5/webapps/geonetwork
-                rm -rf /var/lib/tomcat5/webapps/geoserver-geonode-dev.war /var/lib/tomcat5/webapps/geonetwork.war
-                service tomcat5 start
-        fi
-
-        rm -rf /usr/share/geonode/role.sql /usr/share/geonode/django.configured /usr/share/geonode/*.gz
-	mv -f /usr/share/geonode/tomcat5.original-settings /etc/sysconfig/tomcat5
-	service tomcat5 restart
-
 
 %postun
-# remove files
-# remove users
 
 %clean
 
 %files
 %defattr(-,root,root,-)
 %dir /usr/share/geonode/*
+%config /etc/httpd/conf.d/geonode.conf
+%config /var/www/geonode/wsgi/geonode.wsgi
 %config /var/lib/tomcat5/webapps/*/WEB-INF/web.xml
 %attr(-,tomcat,tomcat) %config %dir /var/lib/geonode-geoserver-data
 %attr(-,tomcat,tomcat) %config /var/lib/geonode-geoserver-data/*
