@@ -87,14 +87,14 @@ function configuredjango() {
 
 # set up django
 #
-mkdir -p /var/www/geonode/{htdocs,htdocs/media,wsgi/geonode/}
-cp /usr/share/geonode/bootstrap.py /var/www/geonode/wsgi/geonode/.
-cp /usr/share/geonode/geonode-webapp.pybundle /var/www/geonode/wsgi/geonode/.
-cp /usr/share/geonode/pavement.py /var/www/geonode/wsgi/geonode/.
-cd /var/www/geonode/wsgi/geonode
-#virtualenv /var/www/geonode/wsgi/geonode
-#source /var/www/geonode/wsgi/geonode/bin/activate
-python26 bootstrap.py
+# mkdir -p /var/www/geonode/{htdocs,htdocs/media,wsgi/geonode/}
+# cp /usr/share/geonode/bootstrap.py /var/www/geonode/wsgi/geonode/.
+# cp /usr/share/geonode/geonode-webapp.pybundle /var/www/geonode/wsgi/geonode/.
+# cp /usr/share/geonode/pavement.py /var/www/geonode/wsgi/geonode/.
+# cd /var/www/geonode/wsgi/geonode
+# #virtualenv /var/www/geonode/wsgi/geonode
+# #source /var/www/geonode/wsgi/geonode/bin/activate
+# python26 bootstrap.py
 
 wget http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.2.tar.gz -P /usr/share/geonode/
 /var/www/geonode/wsgi/geonode/bin/pip install /usr/share/geonode/psycopg2-2.4.2.tar.gz
@@ -161,17 +161,6 @@ source /etc/profile
 	   _logger.addHandler(logging.StreamHandler(sys.stderr))
 	   _logger.setLevel(logging.DEBUG)
 	EOF
-
-	cat <<- EOF > /var/www/geonode/wsgi/geonode.wsgi
-	import site, os
-
-	site.addsitedir('/var/www/geonode/wsgi/geonode/lib/python2.6/site-packages')
-	os.environ['DJANGO_SETTINGS_MODULE'] = 'geonode.settings'
-
-	from django.core.handlers.wsgi import WSGIHandler
-	application = WSGIHandler()
-	EOF
-
 }
 
 function configureapache() {
