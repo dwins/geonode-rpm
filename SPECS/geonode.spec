@@ -12,7 +12,7 @@ Conflicts: mod_python
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
-%define _unpackaged_files_terminate_build 0
+%define __jar_repack %{nil}
 
 %description
 At its core, the GeoNode has a stack based on GeoServer,
@@ -25,13 +25,29 @@ analysis, and reporting tools.
 %install
 	rm -rf $RPM_BUILD_ROOT
 	mkdir -p $RPM_BUILD_ROOT/usr/share/geonode
-	sourcefiles=`ls -1dt Ge* | tail -1`
-	echo "using $sourcefiles for package contents"
-	cp -rp  $sourcefiles/* $RPM_BUILD_ROOT/usr/share/geonode/.
+        # RELEASE=GeoNode-%{version}-
+	RELEASE=GeoNode-1.0.1-2011-08-23
+        for f in bootstrap.py deploy.ini.ex deploy-libs.txt geonode-webapp.pybundle pavement.py README.rst
+        do
+            cp "$RELEASE/$f" "$RPM_BUILD_ROOT"/usr/share/geonode/
+        done
 	cp -rp scripts/* $RPM_BUILD_ROOT/usr/share/geonode/.
 
+        #Deploy Java webapps (WAR files)
+        TC="$RPM_BUILD_ROOT"/var/lib/tomcat5/webapps/
+        GS_DATA="$RPM_BUILD_ROOT"/var/lib/geonode-geoserver-data/
+        mkdir -p "$TC"
+        unzip -qq $RELEASE/geoserver.war -d $TC/geoserver/
+        cp -R "$TC"/geoserver/data/ "$GS_DATA"
+        (cd "$TC"/geoserver/WEB-INF/ && patch -p0) < geoserver.patch
+        unzip -qq $RELEASE/geonetwork.war -d $TC/geonetwork/
 %post
-	echo "GEONODE: you will need to run /usr/share/geonode/setup.sh to complete this installation"
+
+cat << EOF >> /etc/sysconfig/tomcat5
+# Next line added for GeoNode services
+JAVA_OPTS="-Xmx1024m -XX:MaxPermSize=256m -XX:CompileCommand=exclude,net/sf/saxon/event/ReceivingContentHandler.startElement"
+EOF
+echo "GEONODE: you will need to run /usr/share/geonode/setup.sh to complete this installation"
 
 
 %preun
@@ -67,9 +83,15 @@ analysis, and reporting tools.
 # remove files
 # remove users
 
-
 %clean
 
 %files
 %defattr(-,root,root,-)
-%dir "/usr/share/geonode/*"
+%dir /usr/share/geonode/*
+%config /var/lib/tomcat5/webapps/*/WEB-INF/web.xml
+%attr(-,tomcat,tomcat) %config %dir /var/lib/geonode-geoserver-data
+%attr(-,tomcat,tomcat) %config /var/lib/geonode-geoserver-data/*
+%dir /var/lib/tomcat5/webapps/geoserver
+/var/lib/tomcat5/webapps/geoserver/*
+%attr(-,tomcat,tomcat) %dir /var/lib/tomcat5/webapps/geonetwork
+%attr(-,tomcat,tomcat) /var/lib/tomcat5/webapps/geonetwork/*

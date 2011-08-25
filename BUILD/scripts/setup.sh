@@ -15,38 +15,30 @@ function randpass() {
 }
 
 function configuretomcat() {
+true
 
 # configure tomcat
 #
-if [ ! -e /usr/share/geonode/tomcat5.original-settings ]; then
-
-cp  /etc/sysconfig/tomcat5 /usr/share/geonode/tomcat5.original-settings
-cat << EOF >> /etc/sysconfig/tomcat5
-JAVA_OPTS="-Xmx1024m -XX:MaxPermSize=256m -XX:CompileCommand=exclude,net/sf/saxon/event/ReceivingContentHandler.startElement"
-EOF
-
-fi
-
 # stop the tomcat process to prevent it from automatically unpacking the war files
 #
-service tomcat5 stop
+# service tomcat5 stop
 
 # set file permissions and copy the war files in
 #
-chown tomcat. /usr/share/geonode/*.war
-cp /usr/share/geonode/geonetwork.war /var/lib/tomcat5/webapps
-cp /usr/share/geonode/geoserver.war /var/lib/tomcat5/webapps
+# chown tomcat. /usr/share/geonode/*.war
+# cp /usr/share/geonode/geonetwork.war /var/lib/tomcat5/webapps
+# cp /usr/share/geonode/geoserver.war /var/lib/tomcat5/webapps
 
 # perform geonode specific customizations on geoserver
 #
-unzip -qq /var/lib/tomcat5/webapps/geoserver.war -d /var/lib/tomcat5/webapps/geoserver
-patch -l /var/lib/tomcat5/webapps/geoserver/WEB-INF/web.xml < /usr/share/geonode/patch.me
-mkdir -p /opt/geoserver_data
-cp -rp /var/lib/tomcat5/webapps/geoserver/data/* /opt/geoserver_data/.
-chown tomcat. /opt/geoserver_data/ -R
-
-chkconfig tomcat5 on
-service tomcat5 start
+# unzip -qq /var/lib/tomcat5/webapps/geoserver.war -d /var/lib/tomcat5/webapps/geoserver
+# patch -l /var/lib/tomcat5/webapps/geoserver/WEB-INF/web.xml < /usr/share/geonode/patch.me
+# mkdir -p /opt/geoserver_data
+# cp -rp /var/lib/tomcat5/webapps/geoserver/data/* /opt/geoserver_data/.
+# chown tomcat. /opt/geoserver_data/ -R
+# 
+# chkconfig tomcat5 on
+# service tomcat5 start
 }
 
 function configurepostgres() {

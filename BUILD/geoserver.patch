@@ -1,0 +1,27 @@
+--- web.xml	2011-08-24 23:05:23.000000000 -0400
++++ web.xml	2011-08-24 23:17:46.000000000 -0400
+@@ -40,19 +40,15 @@
+     <param-value>50</param-value>
+   </context-param>
+   
+-    <!-- 
+     <context-param>
+-      <param-name>PROXY_BASE_URL</param-name>
+-      <param-value>http://82.58.146.45/</param-value>
+-    </context-param>
+-     -->
+-   
+-     <!--
++       <param-name>GEONODE_BASE_URL</param-name>
++       <param-value>http://localhost/</param-value>
++    </context-param> 
++  
+     <context-param>
+        <param-name>GEOSERVER_DATA_DIR</param-name>
+-        <param-value>C:\eclipse\workspace\geoserver_trunk\cite\confCiteWFSPostGIS</param-value>
++       <param-value>/var/lib/geonode-geoserver-data/</param-value>
+     </context-param> 
+-   -->
+   
+     <!-- pick up all spring application contexts -->
+     <context-param>
