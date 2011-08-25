@@ -161,7 +161,7 @@ source /etc/profile
 #       GEOS_LIBRARY_PATH = '/usr/lib/libgeos_c.so.1.5.0'
 
 	DEFAULT_LAYERS_OWNER='admin'
-	GEONODE_CLIENT_LOCATION = SITEURL
+	GEONODE_CLIENT_LOCATION = SITEURL + "media/static/"
 
 	import logging, sys
 	for _module in ["geonode.maps.views", "geonode.maps.gs_helpers"]:
