@@ -104,8 +104,8 @@ cd /var/www/geonode/wsgi/geonode
 #source /var/www/geonode/wsgi/geonode/bin/activate
 python26 bootstrap.py
 
-curl http://initd.org/psycopg/tarballs/psycopg2-2.2.2.tar.gz -o  /usr/share/geonode/psycopg2-2.2.2.tar.gz
-/var/www/geonode/wsgi/geonode/bin/pip install /usr/share/geonode/psycopg2-2.2.2.tar.gz
+wget http://initd.org/psycopg/tarballs/PSYCOPG-2-4/psycopg2-2.4.2.tar.gz -P /usr/share/geonode/
+/var/www/geonode/wsgi/geonode/bin/pip install /usr/share/geonode/psycopg2-2.4.2.tar.gz
 source /etc/profile
 
 	cd /var/www/geonode/wsgi/geonode/src/GeoNodePy
