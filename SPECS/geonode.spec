@@ -12,7 +12,15 @@ Conflicts: mod_python
 
 %define _rpmdir ../
 %define _rpmfilename %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm
-%define __jar_repack %{nil}
+
+# repacking jar files takes a long time so we disable it
+# %define __jar_repack %{nil} # this option doesn't seem to work on CentOS 5
+%define __os_install_post \
+    /usr/lib/rpm/redhat/brp-compress  \
+    %{!?__debug_package:/usr/lib/rpm/redhat/brp-strip %{__strip}}; \
+    /usr/lib/rpm/redhat/brp-strip-static-archive %{__strip}; \
+    /usr/lib/rpm/redhat/brp-strip-comment-note %{__strip} %{__objdump}; \
+    /usr/lib/rpm/brp-python-bytecompile;
 
 %description
 At its core, the GeoNode has a stack based on GeoServer,
